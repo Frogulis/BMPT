@@ -14,6 +14,13 @@ class Bitmap
     {
         Bitmap bmp = new Bitmap();
         bmp.loadFromFile("example.bmp");
+        Pixel p = bmp.getPixelAt(3, 3);
+        System.out.println(p.getR() + " " + p.getG() + " " + p.getB() + " " + p.getA());
+    }
+
+    public Bitmap()
+    {
+        this.pixels = null;
     }
 
     public void loadFromFile(String filename) throws IOException
@@ -35,6 +42,33 @@ class Bitmap
         readPixels(rawData, pixelsOffset);
     }
 
+    public Pixel getPixelAt(int x, int y)
+    {
+        if (x >= this.imageWidth || y >= this.imageHeight || this.pixels == null)
+        {
+            throw new ArrayIndexOutOfBoundsException(x + ", " + y);
+        }
+        else
+        {
+            return this.pixels[x][y];
+        }
+    }
+
+    public int getImageWidth()
+    {
+        return this.imageWidth;
+    }
+
+    public int getImageHeight()
+    {
+        return this.imageHeight;
+    }
+
+    public int getColourDepth()
+    {
+        return this.colourDepth;
+    }
+
     private byte[] readFile(String filename) throws IOException
     {
         Path path = Paths.get(filename);
@@ -44,24 +78,24 @@ class Bitmap
     private void readPixels(byte[] bytes, int offset)
     {
         int cursor = offset;
-        int padding = 4 - (imageWidth * colourDepth) % 4;
+        int padding = 4 - (imageWidth * (colourDepth / 8)) % 4;
         if (padding == 4)
         {
             padding = 0;
         }
-        this.pixels = new Pixel[imageWidth][];
-        for (int x = 0; x < imageWidth; x++)
-        {
-            this.pixels[x] = new Pixel[imageHeight];
-        
-        }
+        this.pixels = new Pixel[imageWidth][imageHeight];
         for (int y = imageHeight - 1; y >= 0; y--)
         {
             for (int x = 0; x < imageWidth; x++)
             {
+                /*if (y * x * (colourDepth / 8) + offset + imageHeight * padding >=  extractInt(bytes, 2, 4))
+                {
+                    tooFarCount++;
+                    continue;
+                }*/
                 byte[] curPixel = subData(bytes, cursor, this.colourDepth / 8);
                 this.pixels[x][y] = getPixelFromRaw(curPixel);
-                cursor += this.colourDepth;
+                cursor += this.colourDepth / 8;
             }
             cursor += padding;
         }

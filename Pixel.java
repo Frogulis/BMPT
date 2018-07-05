@@ -44,6 +44,11 @@ class Pixel
         return this.b;
     }
 
+    public int getA()
+    {
+        return this.a;
+    }
+
     public int getH()
     {
         return this.h;
