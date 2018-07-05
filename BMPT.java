@@ -18,7 +18,10 @@ class BMPT
 
     private static char[] getCharSet(String set)
     {
-        char[] output = {'0', '1', '2', '3'};
+        char[] output = {'.', ',', '-', '~',
+                         ':', ';', '!', '/',
+                         '(', ']', '$', '#',
+                         'R', 'B', 'N', 'M'};
         return output;
     }
 

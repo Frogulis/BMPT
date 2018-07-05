@@ -150,7 +150,19 @@ class Bitmap
         {
             output = (output << 8) | bytes[cursor];
         }
-        return output;
+        if (output >= 0)
+        {
+            return output;
+        }
+        else
+        {
+            return toTwosComplement(output);
+        }
+    }
+
+    private int toTwosComplement(int n)
+    {
+        return ~n + 1;
     }
 
     private void printBinary(byte[] bytes)
