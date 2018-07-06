@@ -8,7 +8,10 @@ class BMPT
         BMPT a = new BMPT();
         Bitmap b = new Bitmap();
         b.loadFromFile(args[0]);
+        Pixel p = b.getPixelAt(30, 30);
+        System.out.println(p.getR() + " " + p.getG() + " " + p.getB());
         a.printBitmap(b, 0);
+
     }
 
     public BMPT()
@@ -18,10 +21,33 @@ class BMPT
 
     private static char[] getCharSet(String set)
     {
+        switch(set)
+        {
+            case "16":
+            case "default":
+                return charSet16();
+            case "32":
+                return charSet32();
+            default:
+                return charSet16();
+        }
+    }
+
+    private static char[] charSet16()
+    {
         char[] output = {'.', ',', '-', '~',
                          ':', ';', '!', '}',
                          '(', ']', '$', '#',
                          'R', 'B', 'N', 'M'};
+        return output;
+    }
+
+    private static char[] charSet32()
+    {
+        char[] output = {'-', '`', '.', ',', 185, 178, 179, 186,
+                         '~', '+', 'i', 238, '=', 'c', 'u', 'v',
+                         'e', 252, 251, '}', 169, 174, '$', '@',
+                         '#', '2', '0', '8', 'M', 195, 202, 208};
         return output;
     }
 
@@ -48,7 +74,7 @@ class BMPT
 
     private void printPixel(Pixel curPixel, int spacer)
     {
-        char[] set = getCharSet("default");
+        char[] set = getCharSet("32");
         System.out.print(set[pixelToValue(curPixel) / (255 / (set.length))]);
         for (int i = 0; i < spacer; i++)
         {

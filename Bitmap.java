@@ -88,11 +88,6 @@ class Bitmap
         {
             for (int x = 0; x < imageWidth; x++)
             {
-                /*if (y * x * (colourDepth / 8) + offset + imageHeight * padding >=  extractInt(bytes, 2, 4))
-                {
-                    tooFarCount++;
-                    continue;
-                }*/
                 byte[] curPixel = subData(bytes, cursor, this.colourDepth / 8);
                 this.pixels[x][y] = getPixelFromRaw(curPixel);
                 cursor += this.colourDepth / 8;
