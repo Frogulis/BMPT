@@ -16,7 +16,9 @@ class BMPT
 
     public BMPT()
     {
-        //
+        double v = (double)  pixelToValue(new Pixel(255,255,255,0));
+        //double v = (int) 255;
+        System.out.println(v / (255.0 / 31.0));
     }
 
     private static char[] getCharSet(String set)
@@ -75,7 +77,8 @@ class BMPT
     private void printPixel(Pixel curPixel, int spacer)
     {
         char[] set = getCharSet("32");
-        System.out.print(set[pixelToValue(curPixel) / (255 / (set.length))]);
+        double converted = (double) pixelToValue(curPixel) / (255.0 / ((double) set.length - 1));
+        System.out.print(set[(int) converted]);
         for (int i = 0; i < spacer; i++)
         {
             System.out.print(" ");

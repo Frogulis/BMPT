@@ -12,15 +12,19 @@ class Bitmap
 
     public static void main(String[] args) throws IOException
     {
-        Bitmap bmp = new Bitmap();
-        bmp.loadFromFile("example.bmp");
-        Pixel p = bmp.getPixelAt(3, 3);
-        System.out.println(p.getR() + " " + p.getG() + " " + p.getB() + " " + p.getA());
+        Bitmap b = new Bitmap();
+        b.test();
     }
 
     public Bitmap()
     {
         this.pixels = null;
+    }
+
+    public void test()
+    {
+        byte[] c = {(byte) 255, (byte) 0, (byte) 0, (byte) 0};
+        System.out.println(bytesToInt_Little(c));
     }
 
     public void loadFromFile(String filename) throws IOException
@@ -143,7 +147,7 @@ class Bitmap
         int output = 0;
         for (int cursor = bytes.length - 1; cursor >= 0; cursor--)
         {
-            output = (output << 8) | bytes[cursor];
+            output = (output << 8) | ((int) bytes[cursor] & 0xFF);
         }
         if (output >= 0)
         {
