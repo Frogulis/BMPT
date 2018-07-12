@@ -7,9 +7,16 @@ java compiler and runtime\
 
 ### installing
 clone or download the repository to a directory on your computer\
-run the command `java BMPT.java`
+run the command `./build.sh` in a bash shell
+alternatively, run the 3 commands therein manually
 
 ### running
-for it to display properly, you'll need an image that is less wide (in pixels) than half of the width of your terminal (in characters)
-the command `java BMPT filename.bmp` will run the program once it has compiled
+the structure of a command to run the program is
+`java bmpt.BMPT [options] [filename]`
+
+the options can consist of\
+`-c [integer]` -- the size of the character set to use. currently 32 and 16 are valid.\
+`-w [integer]` -- the maximum width (in characters). set this to something smaller or equal to your terminal's width
+
+neither of these options are required
 
