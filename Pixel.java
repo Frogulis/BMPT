@@ -1,3 +1,5 @@
+package bmpt;
+
 class Pixel
 {
     private int r;

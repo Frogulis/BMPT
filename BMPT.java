@@ -1,41 +1,82 @@
+package bmpt;
+
 import java.io.IOException;
+import java.util.List;
+import joptsimple.OptionParser;
+import joptsimple.OptionSet;
+import joptsimple.OptionException;
+import joptsimple.OptionSpec;
 
 class BMPT
 {
+    String charSetName;
+    int termWidth;
 
     public static void main(String[] args) throws IOException
     {
-        BMPT a = new BMPT();
+        OptionParser parser = new OptionParser();
+        OptionSpec<Integer> opt_w = parser.accepts("w").withRequiredArg().ofType(Integer.class);
+        OptionSpec<String> opt_c = parser.accepts("c").withRequiredArg().ofType(String.class);
+        OptionSpec<String> nonOptions = parser.nonOptions("image file name").ofType(String.class).describedAs("filename");
+        OptionSet options;
+        try {
+             options = parser.parse(args);
+        }
+        catch (OptionException | NullPointerException ex) {
+            System.out.println(ex.getMessage());
+            return;
+        }
+        String charSet = "default";
+        int termWidth = 0;
+        try
+        {
+            if (options.has(opt_w))
+            {
+                termWidth = options.valueOf(opt_w);
+            }
+            if (options.has(opt_c))
+            {
+                charSet = options.valueOf(opt_c);
+            }
+        }
+        catch (Exception ex)
+        {
+            System.out.println(ex.getMessage() + "\nInteger argument required");
+            return;
+        }
+        BMPT a = new BMPT(charSet, termWidth);
         Bitmap b = new Bitmap();
-        b.loadFromFile(args[0]);
+        List noa = options.nonOptionArguments();
+        if (noa.size() != 1)
+        {
+            System.out.println("Exactly one filename required.");
+            return;
+        }
+        b.loadFromFile((String) noa.get(0));
         Pixel p = b.getPixelAt(30, 30);
-        System.out.println(p.getR() + " " + p.getG() + " " + p.getB());
-        a.printBitmap(b, 0);
-
+        a.printBitmap(b);
     }
 
-    public BMPT()
+    public BMPT(String charSetName, int termWidth)
     {
-        double v = (double)  pixelToValue(new Pixel(255,255,255,0));
-        //double v = (int) 255;
-        System.out.println(v / (255.0 / 31.0));
+        this.charSetName = charSetName;
+        this.termWidth = termWidth;
     }
 
-    private static char[] getCharSet(String set)
+    private char[] getCharSet()
     {
-        switch(set)
+        switch(this.charSetName)
         {
             case "16":
-            case "default":
                 return charSet16();
             case "32":
-                return charSet32();
+            case "default":
             default:
-                return charSet16();
+                return charSet32();
         }
     }
 
-    private static char[] charSet16()
+    private char[] charSet16()
     {
         char[] output = {'.', ',', '-', '~',
                          ':', ';', '!', '}',
@@ -44,7 +85,7 @@ class BMPT
         return output;
     }
 
-    private static char[] charSet32()
+    private char[] charSet32()
     {
         char[] output = {'-', '`', '.', ',', 185, 178, 179, 186,
                          '~', '+', 'i', 238, '=', 'c', 'u', 'v',
@@ -53,16 +94,16 @@ class BMPT
         return output;
     }
 
-    public void printBitmap(Bitmap bmp, int termWidth)
+    public void printBitmap(Bitmap bmp)
     {
         int maxWidth;
-        if (termWidth == 0 || bmp.getImageWidth() < termWidth)
+        if (this.termWidth == 0 || bmp.getImageWidth() < this.termWidth)
         {
             maxWidth = bmp.getImageWidth();
         }
         else
         {
-            maxWidth = termWidth;
+            maxWidth = this.termWidth;
         }
         for (int y = 0; y < bmp.getImageHeight(); y++)
         {
@@ -76,7 +117,7 @@ class BMPT
 
     private void printPixel(Pixel curPixel, int spacer)
     {
-        char[] set = getCharSet("32");
+        char[] set = getCharSet();
         double converted = (double) pixelToValue(curPixel) / (255.0 / ((double) set.length - 1));
         System.out.print(set[(int) converted]);
         for (int i = 0; i < spacer; i++)

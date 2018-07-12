@@ -1,3 +1,5 @@
+package bmpt;
+
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.nio.file.Files;
@@ -24,7 +26,6 @@ class Bitmap
     public void test()
     {
         byte[] c = {(byte) 255, (byte) 0, (byte) 0, (byte) 0};
-        System.out.println(bytesToInt_Little(c));
     }
 
     public void loadFromFile(String filename) throws IOException
@@ -36,13 +37,13 @@ class Bitmap
         this.colourDepth = extractInt(rawData, 28, 2);
         this.imageWidth = extractInt(rawData, 18, 4);
         this.imageHeight = extractInt(rawData, 22, 4);
-        System.out.println(extractInt(rawData, 2, 4));
-        System.out.println(this.colourDepth + " " +
+        //System.out.println(extractInt(rawData, 2, 4));
+        /*System.out.println(this.colourDepth + " " +
             this.imageWidth + " " +
-            this.imageHeight);
+            this.imageHeight);*/
 
         int pixelsOffset = extractInt(rawData, 10, 4);
-        System.out.println(pixelsOffset);
+        //System.out.println(pixelsOffset);
         readPixels(rawData, pixelsOffset);
     }
 
