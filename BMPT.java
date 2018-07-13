@@ -53,7 +53,6 @@ class BMPT
             return;
         }
         b.loadFromFile((String) noa.get(0));
-        Pixel p = b.getPixelAt(30, 30);
         a.printBitmap(b);
     }
 
